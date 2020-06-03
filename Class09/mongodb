@@ -1,0 +1,38 @@
+// 1
+// db.tweets.find({'source':'web'}).count()
+
+// 2
+//db.tweets.find({'entities.hashtags.text':'javascript'}).count()
+
+// 3
+/*
+db.tweets.aggregate([
+{ $match: { "entities.hashtags" : {'$ne': [ ] } } },
+{ $group: { _id: "$entities.hashtags.text" , num_id : {$sum : 1}} },
+{ $sort: {"num_id": -1} }
+])
+*/
+
+// 4
+// db.tweets.find({"user.followers_count" : { '$gt': 100}}).count()
+
+// 5
+// db.tweets.find().limit(100).sort({"user.friends_count": -1})
+
+// 6
+// db.tweets.find({"text": {'$regex' : "Cristiano Ronaldo"}}).count()
+
+// 7
+// db.tweets.find( { "user.time_zone" : {'$eq' : "Lisbon"} } ).count()
+
+// 8
+// db.tweets.distinct("user.time_zone")
+
+// 9
+db.tweets.aggregate([
+{ $group: { _id: "$user.time_zone" , num_timezone : {$sum : 1}} },
+{ $sort: {"num_timezone": -1} },
+{ $limit: 1 }
+])
+
+

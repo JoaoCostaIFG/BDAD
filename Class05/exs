@@ -1,0 +1,6 @@
+x7 = π Nome (σ curso='IS' (Cadeira ⨝ (Aluno ⨝ Prova)))
+
+x9 = π nota (Prova) - (ρ nota←nota1 (π nota1 (σ nota1<nota2 (π nota1 (ρ nota1←nota (Prova)) ⨝ π nota2 (ρ nota2←nota (Prova))))))
+x10 = γ avg(nota)->nota (σ cod='BD' (Prova))
+x11 = γ count(nr)->nr (Aluno)
+γ count(curso)->curso (sigma curso='IS' (Cadeira))

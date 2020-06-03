@@ -1,0 +1,89 @@
+PRAGMA foreign_keys=ON;
+BEGIN TRANSACTION;
+
+CREATE TABLE Marca (
+  idMarca INTEGER PK,
+  nome TEXT);
+
+CREATE TABLE Modelo (
+  idModelo INTEGER PK,
+  nome TEXT,
+  idMarca INTEGER,
+  FOREIGN KEY (idMarca) REFERENCES Marca(idMarca));
+
+CREATE TABLE CodPostal (
+  codPostal1 number PK,
+  localidade text);
+
+CREATE TABLE Cliente (
+  idCliente INTEGER PK,
+  nome TEXT,
+  morada TEXT,
+  codPostal1 number,
+  codPostal2 number,
+  telefone text,
+  FOREIGN KEY (codPostal1) REFERENCES CodPostal(codPostal1));
+
+CREATE TABLE Carro (
+  idCarro INTEGER PK,
+  matricula text UNIQUE,
+  idModelo INTEGER,
+  idCliente INTEGER,
+  FOREIGN KEY (idModelo) REFERENCES Modelo(idModelo),
+  FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente));
+
+CREATE TABLE Reparacao (
+  idReparacao INTEGER PK,
+  dataInicio date CHECK (dataInicio >= 0),
+  dataFim date CHECK (dataFim >= 0 and dataFim >= dataInicio),
+  idCliente INTEGER,
+  idCarro INTEGER,
+  FOREIGN KEY (idCarro) REFERENCES Carro(idCarro),
+  FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente));
+
+CREATE TABLE Peca (
+  idPeca INTEGER PK,
+  codigo text UNIQUE,
+  designacao text,
+  custoUnitario real CHECK (custoUnitario >= 0),
+  quantidade INTEGER CHECK (quantidade >= 0));
+
+CREATE TABLE ReparacaoPeca (
+  idReparacao INTEGER,
+  idPeca INTEGER,
+  PRIMARY KEY (idReparacao, idPeca),
+  FOREIGN KEY (idReparacao) REFERENCES Reparacao(idReparacao),
+  FOREIGN KEY (idPeca) REFERENCES Peca(idPeca));
+
+CREATE TABLE PecaModelo (
+  idPeca INTEGER,
+  idModelo INTEGER,
+  PRIMARY KEY (idPeca, idModelo),
+  FOREIGN KEY (idPeca) REFERENCES Peca(idPeca),
+  FOREIGN KEY (idModelo) REFERENCES Modelo(idModelo));
+
+CREATE TABLE Especialidade (
+  idEspecialidade INTEGER PK,
+  nome text,
+  custoHorario real CHECK(custoHorario > 0));
+
+CREATE TABLE Funcionario (
+  idFuncionario INTEGER PK,
+  nome text,
+  morada text,
+  codPostal1 number,
+  codPostal2 number,
+  telefone text,
+  idEspecialidade INTEGER,
+  FOREIGN KEY (codPostal1) REFERENCES CodPostal(codPostal1),
+  FOREIGN KEY (idEspecialidade) REFERENCES Especialidade(idEspecialidade));
+  
+CREATE TABLE FuncionarioReparacao (
+  idFuncionario INTEGER,
+  idReparacao INTEGER,
+  numHoras real CHECK (numHoras > 0),
+  PRIMARY KEY (idFuncionario, idReparacao),
+  FOREIGN KEY (idFuncionario) REFERENCES Funcionario(idFuncionario),
+  FOREIGN KEY (idReparacao) REFERENCES Reparacao(idReparacao));
+
+COMMIT;

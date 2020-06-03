@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<quiz>
+  <question type="multichoice">
+    <name>
+      <text>Conceptual model question</text>
+    </name>
+    <questiontext format="html">
+      <text>If every object in a super class is in at least one of the subclass, we say the generalization is...</text>
+    </questiontext>
+    <answer fraction="100" format="html">
+      <text>Complete</text>
+      <feedback format="html">
+        <text>A generalization is complete when every object in a super class is in at least one of the subclasses. This is exactly what is being asked, so this is the correct option.</text>
+      </feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text>Incomplete (or partial)</text>
+      <feedback format="html">
+        <text>A generalization is incomplete (or partial) when there is at least one attribute in the super class that isn't in any of the subclasses. This is the opposite of what's being asked.</text>
+      </feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text>Disjoint (or exclusive)</text>
+      <feedback format="html">
+        <text>A generalization is disjoint (or exclusive) when every object is in at most one subclass. A generalization can be disjoint, and complete or incomplete, so this doesn't relate to what is being asked.</text>
+      </feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text>Overlapping</text>
+      <feedback format="html">
+        <text>A generalization is overlapping when there is at least one object that is in multiple (more than one) subclasses. A generalization can be overlapping, and complete or incomplete, so this doesn't relate to what is being asked.</text>
+      </feedback>
+    </answer>
+    <shuffleanswers>1</shuffleanswers>
+    <single>true</single>
+    <answernumbering>abc</answernumbering>
+  </question>
+</quiz>

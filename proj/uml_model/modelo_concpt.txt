@@ -1,0 +1,83 @@
+@startuml
+
+skinparam defaultFontSize 17
+skinparam classFontSize 14
+skinparam classAttributeFontSize 14
+
+class Localidade {
+  nome
+  codigo
+}
+
+class Despensa {
+  nome
+  morada
+  cod_post_fim
+}
+
+class TipoProduto {
+  nome
+}
+
+class Produto {
+  nome
+  codigo_barras
+}
+
+class Desconto {
+  percentagem
+  data_inicio
+  data_fim
+}
+
+class InfoProduto {
+  preco
+}
+
+class UnidadesProduto {
+  quant
+  min_quant
+  is_autorenew
+}
+
+class QuantidadeProduto {
+  quant
+}
+
+class Loja {
+  nome
+  morada
+  cod_post_fim
+}
+
+class CadeiaLojas {
+  nome
+}
+
+class Encomenda {
+  id
+  data_emissao
+  preco
+}
+
+Despensa "*" -- "1" Localidade
+Despensa "*" -- "*" Produto
+Despensa "1" -- "*" Encomenda
+(Despensa, Produto) .. UnidadesProduto
+
+Produto "*" -- "1..*" TipoProduto
+Produto "*" -- "1..*" Loja
+Produto "1..*" -- "*" Encomenda
+(Produto, Encomenda) .. QuantidadeProduto
+TipoProduto "*" -- "*" TipoProduto : Subcategoria
+(Produto, Loja) .. InfoProduto
+
+Loja "*" -- "1" Localidade
+Loja "*" --* "0..1" CadeiaLojas
+Loja "*" -- "*" Desconto : {não pertence cadeia}
+Loja "1" -- "*" Encomenda
+
+CadeiaLojas "1" -- "*" Desconto
+Desconto "*" -- "*" Produto
+
+@enduml

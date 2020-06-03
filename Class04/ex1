@@ -1,0 +1,65 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE Team(
+    name text PK,
+    country text);
+
+CREATE TABLE Aircraft(
+    model text PK,
+    horsepower integer,
+    topspeed real,
+    width real,
+    height real,
+    weight real);
+
+CREATE TABLE Pilot(
+    num integer pk,
+    firstname text,
+    surname text,
+    nationality text,
+    birthday date,
+    name text,
+    model text,
+    FOREIGN KEY (name) REFERENCES Team(name),
+    FOREIGN KEY (model) REFERENCES Aircraft(model));
+
+CREATE TABLE Race(
+    location text,
+    edition number,
+    country text,
+    date date UNIQUE,
+    gates number,
+    eliminations number,
+    PRIMARY KEY(location, edition));
+
+CREATE TABLE Participation(
+    num number,
+    location text,
+    edition number,
+    trainingtime NUMBER CHECK (trainingtime > 0 AND trainingpos <> NULL),
+    trainingpos NUMBER DEFAULT NULL CHECK (trainingpos > 1),
+    trainingpenalty NUMBER,
+    qualificationtime NUMBER CHECK (qualificationtime > 0 AND qualificationpos <> NULL),
+    qualificationpos NUMBER DEFAULT NULL CHECK (qualificationpos > 1),
+    qualificationpenalty NUMBER,
+    eliminationtime NUMBER CHECK (eliminationtime > 0 AND eliminationpos <> NULL),
+    eliminationpos NUMBER DEFAULT NULL CHECK (eliminationpos > 1),
+    eliminationpenalty NUMBER,
+    PRIMARY KEY (num, location, edition),
+    FOREIGN KEY (num) REFERENCES Pilot(num),
+    FOREIGN KEY (location, edition) REFERENCES Race(location, edition),
+    CHECK(trainingpos <> null or (trainingpos == null and trainingtime == null)),
+    CHECK(qualificationpos <> null or (qualificationpos == null and qualificationtime == null)),
+    CHECK(eliminationpos <> null or (eliminationpos == null and eliminationtime == null)));
+
+CREATE TABLE Duel(
+    numpilot1 number,
+    numpilot2 number,
+    location text,
+    edition number,
+    dueltype text,
+    timepilot1 number,
+    timepilot2 number,
+    penaltypilot1 real,
+    penaltypilot2 real);
+COMMIT;

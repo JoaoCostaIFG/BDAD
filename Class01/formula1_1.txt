@@ -1,0 +1,53 @@
+@startuml
+
+class marca {
+  nome
+  pontos
+}
+
+class país {
+  nome
+  sigla
+}
+
+class carro {
+  peso
+  potência
+  v_max
+}
+
+class circuito {
+  nome
+  local
+  perímetro
+}
+
+class corrida {
+  data
+  voltas
+}
+
+class piloto {
+  nome
+  morada
+  data_nascimento
+  pontos
+}
+
+class grelha {
+  grelha
+  pos_f
+  volta
+  motivo
+}
+
+marca -- país
+marca -- "1..*" carro
+carro -- "*" piloto
+circuito -- país
+circuito -- "1..2" corrida
+corrida "*" -- "*" piloto
+piloto -- país
+(corrida, piloto) .. grelha
+
+@enduml
