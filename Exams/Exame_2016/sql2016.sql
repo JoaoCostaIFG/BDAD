@@ -1,0 +1,71 @@
+-- -- 15
+--  SELECT nome
+--  FROM
+  --  (SELECT Estudante.nome, count(*) as cnt
+  --  FROM Estudante INNER JOIN Amizade ON (Estudante.ID = Amizade.ID1)
+  --  GROUP BY Estudante.ID)
+--  WHERE cnt > 3;
+
+-- -- 16
+--  SELECT e1.nome, e1.anoCurricular
+--  FROM Estudante as e1
+  --  inner join Amizade On (e1.id = Amizade.id1 or e1.id = Amizade.id2)
+  --  inner join estudante as e2 on (Amizade.id2 = e2.id or Amizade.id1 = e2.id)
+--  group by e1.id
+--  HAVING max(e2.anoCurricular) = min(e2.anoCurricular)
+--  Order By e1.anoCurricular, e1.nome;
+
+-- -- 17 (not working)
+--  select distinct a3.id2
+--  from estudante e1 join amizade a1 ON (e1.id = a1.id1)
+  --  join estudante e2 ON (e2.id = a1.id2)
+  --  join amizade a2 ON (e2.id = a2.id1)
+  --  join estudante e3 ON (e3.id = a2.id2)
+  --  join amizade a3 ON (e3.id = a3.id1)
+--  where
+  --  e1.nome = 'Miguel Sampaio';
+
+-- -- 18
+--  SELECT nome, anoCurricular
+--  FROM
+  --  (SELECT nome, anoCurricular, max(numAmigos)
+  --  FROM
+    --  (select e1.nome, e1.anoCurricular, count(*) as numAmigos
+    --  from Estudante as e1 inner join Amizade On (e1.id = Amizade.id1)
+      --  inner join estudante as e2 on (Amizade.id2 = e2.id)
+    --  group by e1.id)
+  --  );
+
+-- -- 18 v.2
+--  CREATE VIEW maxFriends AS
+--  SELECT max(nFriends)
+--  FROM
+--  (
+  --  SELECT count(*) as nFriends
+  --  FROM Amizade
+  --  GROUP BY id1
+--  );
+
+--  SELECT e1.nome, e1.anoCurricular
+--  FROM
+  --  Estudante e1 JOIN Amizade a ON (e1.id = a.id1)
+    --  JOIN Estudante e2 ON (e2.id = a.id2)
+--  GROUP BY e1.id
+--  HAVING count(*) in maxFriends
+
+-- -- 19
+--  DROP TRIGGER IF EXISTS InsertEstudanteAmizade;
+--  CREATE TRIGGER InsertEstudanteAmizade
+--  After INSERT ON Estudante
+--  FOR EACH ROW
+--  BEGIN
+  --  INSERT INTO Amizade (id1, id2)
+  --  SELECT New.id, Estudante.id
+  --  FROM Estudante
+  --  WHERE Estudante.curso = New.curso and New.id <> Estudante.id;
+
+  --  INSERT INTO Amizade (id1, id2)
+  --  SELECT Estudante.id, New.id
+  --  FROM Estudante
+  --  WHERE Estudante.curso = New.curso and New.id <> Estudante.id;
+--  END;

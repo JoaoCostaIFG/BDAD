@@ -1,0 +1,70 @@
+3A
+
+select hostname, nome 
+from Servidor join Pessoa on (idPessoa = idResponsavel and vulneravel = "sim");
+
+3B
+
+select hostname,descricao, nome 
+from ((Servidor join Pessoa on (idPessoa = Servidor.idResponsavel))
+join AplicacaoServidor on (Servidor.idServidor = AplicacaoServidor.idServidor)) 
+join Bug on (Bug.idAplicacao = AplicacaoServidor.idAplicacao and Bug.vulnerabilidade = "sim")
+order by hostname;
+
+3C
+
+create view hasBug as
+select Servidor.idServidor
+from Bug join AplicacaoServidor on (Bug.idAplicacao = AplicacaoServidor.idAplicacao)
+join Servidor on (Servidor.idServidor = AplicacaoServidor.idServidor);
+
+select hostname
+from Servidor join Pessoa on (idResponsavel = idPessoa)
+where hostname like "alu%" and idServidor in hasBug and Pessoa.mail = "joao.almeida@cica.pt";
+
+3D
+
+create view maxBug as 
+select max(nBugs)
+from
+(
+select count(*) as nBugs
+from Bug
+group by idAplicacao
+);
+
+select nome
+from Aplicacao join Bug on (Aplicacao.idAplicacao = Bug.idAplicacao)
+group by Aplicacao.idAplicacao
+having(count(idBug) in maxBug);
+
+3E
+
+create trigger addVul
+after insert on AplicacaoServidor
+when(New.idAplicacao in (select idAplicacao from bug where vulnerabilidade = "sim"))
+begin
+	update Servidor set vulneravel = "sim" 
+	where(Servidor.idServidor = New.idServidor);
+end;
+
+3F
+
+create trigger updateBug
+after insert on Bug
+when(New.vulnerabilidade = "sim")
+begin
+	update Bug set prioridade = 1 where (Bug.idBug = New.idBug);
+
+	update Servidor set vulneravel = "sim" 
+	where(Servidor.idServidor in (select idServidor 
+	from AplicacaoServidor 
+	where (AplicacaoServidor.idAplicacao = New.idAplicacao)));
+end;
+
+
+
+
+
+
+
